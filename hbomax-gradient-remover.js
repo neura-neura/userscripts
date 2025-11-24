@@ -5,7 +5,7 @@
 // @description  Remove the gradient element from the control overlay which is shown on a mouse movement
 // @version      2025.11.24
 // @author       neura-neura
-// @license        MIT
+// @license      MIT
 // @match        http*://play.hbomax.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=max.com
 // @grant        window.onurlchange
