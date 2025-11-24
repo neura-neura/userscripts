@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Disney Plus Subtitle Styler
 // @namespace    https://tampermonkey.net/
-// @version      1.0
+// @version      2025.11.24
 // @description  Replaces Disney Plus subtitles with the GothamPro font, enforces a transparent background, improves readability, and adds automatic line spacing control.
 // @author       neura-neura
 // @license      MIT
