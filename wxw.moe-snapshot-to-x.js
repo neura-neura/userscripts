@@ -13,6 +13,8 @@
 // @require      https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js
 // @grant        none
 // @license      MIT
+// @downloadURL https://update.greasyfork.org/scripts/556805/wxwmoe%20Snapshot%20to%20X.user.js
+// @updateURL https://update.greasyfork.org/scripts/556805/wxwmoe%20Snapshot%20to%20X.meta.js
 // ==/UserScript==
 
 (function () {
