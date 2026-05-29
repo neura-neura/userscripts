@@ -4,6 +4,7 @@
 // @version      0.8.3
 // @description  Adds an Extra tools menu to ChatGPT, including translator prompt injectors.
 // @author       neura
+// @license      MIT
 // @homepageURL  https://github.com/neura-neura/userscripts
 // @supportURL   https://github.com/neura-neura/userscripts/issues
 // @match        https://chatgpt.com/*
