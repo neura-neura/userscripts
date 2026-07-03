@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Crunchyroll Subtitle Resizer
+// @name         Crunchyroll Custom Subtitle Renderer
 // @namespace    https://github.com/neura-neura/userscripts
 // @version      1.0
 // @description  Forces clean Crunchyroll playback and renders adjustable ASS subtitles, annotations, and local subtitle files
