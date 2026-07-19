@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X / Twitter → VRChat
 // @namespace    https://github.com/neura-neura/userscripts
-// @version      1.1.3
+// @version      1.1.4
 // @description  Copies the progressive MP4 of an X/Twitter video to paste into a VRChat video player.
 // @author       neura-neura
 // @match        https://x.com/*
@@ -30,6 +30,37 @@
   let scanPending = false;
   let toastTimer;
 
+  // X keeps this test id stable more often than it keeps translated labels
+  // stable. The label list covers localized builds that omit the test id.
+  const SHARE_TEST_IDS = new Set(['share', 'sharebutton', 'share-post']);
+  const SHARE_LABELS = new Set([
+    'share',
+    'share post',
+    'compartir',
+    'compartir publicación',
+    'compartir publicacion',
+    '分享',
+    '分享帖子',
+    '分享貼文',
+    '共有',
+    'ポストを共有',
+    '공유',
+    '게시물 공유',
+    'partager',
+    'partager le post',
+    'teilen',
+    'beitrag teilen',
+    'compartilhar',
+    'compartilhar post',
+    'partilhar',
+    'condividi',
+    'condividi post',
+    'поделиться',
+    'поділитися',
+    'paylaş',
+    'مشاركة',
+    'साझा करें',
+  ]);
 
   const VRC_ICON_PATHS = Object.freeze([
     {
@@ -414,9 +445,50 @@
     if (!copied) throw lastError || new Error('The browser denied clipboard access.');
   }
 
+  function normalizeActionLabel(value) {
+    return String(value || '')
+      .normalize('NFKC')
+      .replace(/\s+/gu, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  function isShareButton(button) {
+    const testID = normalizeActionLabel(button.getAttribute('data-testid'));
+    if (SHARE_TEST_IDS.has(testID)) return true;
+
+    const label = normalizeActionLabel(button.getAttribute('aria-label'));
+    return SHARE_LABELS.has(label);
+  }
+
+  function findStructuralShareButton(post, buttons) {
+    // In X's action row, Share is consistently the final action. Looking at
+    // the row shape keeps this fallback independent of the current locale.
+    for (const group of post.querySelectorAll('[role="group"]')) {
+      const groupButtons = buttons.filter(button => button.closest('[role="group"]') === group);
+      if (groupButtons.length >= 4) return groupButtons.at(-1);
+    }
+
+    const rows = new Map();
+    for (const button of buttons) {
+      const row = button.parentElement;
+      if (!row || rows.has(row)) continue;
+
+      const rowButtons = [...row.children].filter(
+        child => child.matches?.('button') && !child.hasAttribute(BUTTON_ATTRIBUTE),
+      );
+      if (rowButtons.length >= 4) rows.set(row, rowButtons);
+    }
+
+    return [...rows.values()]
+      .sort((a, b) => b.length - a.length)[0]
+      ?.at(-1);
+  }
+
   function findShareButton(post) {
-    const buttons = [...post.querySelectorAll('button[aria-label]')];
-    return buttons.find(button => /^share(?:\s+post)?$/i.test(button.getAttribute('aria-label').trim()));
+    const buttons = [...post.querySelectorAll('button')]
+      .filter(button => !button.hasAttribute(BUTTON_ATTRIBUTE));
+    return buttons.find(isShareButton) || findStructuralShareButton(post, buttons);
   }
 
   function isFlatActionRow(element) {

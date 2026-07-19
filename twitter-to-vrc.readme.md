@@ -19,4 +19,4 @@ When clicked, it detects the highest-bitrate progressive MP4 variant that X retu
 - The script does not use an intermediary server or download the video. It intercepts data that X already sends to the browser and selects the highest-bitrate progressive MP4.
 - X's `<video>` element uses a local `blob:` URL that does not work in VRChat. X's HLS playlist uses fragmented MP4 segments and may be corrupted in external players, so the script does not copy it.
 - If the notification says that X did not expose an MP4, reload the post after updating the script and play the video again. Interception must be active before X requests the post data.
-- X changes its interface frequently. The button is anchored to the accessible Share button and supports both the classic action group and the current button row.
+- X changes its interface frequently. The button detects Share by X's test id, localized accessible labels (including simplified and traditional Chinese), or the language-independent shape of the action row.
